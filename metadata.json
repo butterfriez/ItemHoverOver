@@ -1,0 +1,8 @@
+{
+  "name": "Item Hover Over",
+  "creator": "butther",
+  "version": "0.0.1",
+  "entry": "index.js",
+  "requires": ["PogData", "Lore"],
+  "description": "Checks for stat/enchant/any word on an item using a text field."
+}
