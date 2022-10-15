@@ -78,14 +78,16 @@ register("tick", () => {
     if(hoverover == (undefined || null)) return
     let enchants = hoverover?.getNBT()?.getTag("tag")?.getTag("display")?.get("Lore")
     if(enchants == (undefined || null)) return
-    if(enchants.toString().includes(searchTerm) && searchTerm.length > 0 && !enchants.toString().includes("Includes Enchant")) {
-      Lore.append(hoverover, "Includes Enchant", false)
-    } else if(!enchants.toString().includes(searchTerm) && enchants.toString().includes("Includes Enchant")) {
-      let i = 1
-      hoverover.getLore().forEach(() => {
-        i++
-      })
-      Lore.remove(hoverover, i)
-    }
+    searchTerm.split(", ").forEach(term => {
+      if(enchants.toString().includes(term) && term.length > 0 && !enchants.toString().includes("Includes Lore")) {
+        Lore.append(hoverover, "Includes Lore", false)
+      } else if(!enchants.toString().includes(term) && enchants.toString().includes("Includes Lore")) {
+        let i = 1
+        hoverover.getLore().forEach(() => {
+          i++
+        })
+        Lore.remove(hoverover, i)
+      }
+    })
   }
 })
