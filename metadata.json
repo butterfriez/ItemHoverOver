@@ -3,6 +3,6 @@
   "creator": "butther",
   "version": "0.0.1",
   "entry": "index.js",
-  "requires": ["PogData", "Lore"],
+  "requires": ["PogData", "Lore", "CTAutocomplete"],
   "description": "Checks for stat/enchant/any word on an item using a text field."
 }

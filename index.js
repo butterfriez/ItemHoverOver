@@ -1,6 +1,12 @@
 /// <reference types="../CTAutocomplete" />
+
+//useless shit
+//import "./fuckofftictactoeplayer"
+
 import PogObject from "../PogData"
 import Lore from "../Lore"
+//util
+import checkSkyblock from "./utils/util"
 //prefix
 const prefix = "&7[&r&3Item Hover Over&r&7] &r"
 //variables
@@ -45,8 +51,9 @@ register("guiMouseClick", (x, y, button) => {
 })
 
 register("guiRender", (x, y, gui) => {
-  if(data.toggle == true) {
-    if(gui.class.getName().includes("ProfileViewer")) {
+  console.log(gui.class.getName())
+  if(data.toggle == true && checkSkyblock()) {
+    if(gui.class.getName().toLowerCase().includes("profileviewer") || gui.class.getName() == "net.minecraft.client.gui.GuiIngameMenu") {
       return
     } else {
       searchBar.func_146194_f() //draw
