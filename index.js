@@ -13,14 +13,15 @@ const prefix = "&7[&r&3Item Hover Over&r&7] &r"
 const GuiTextField = Java.type("net.minecraft.client.gui.GuiTextField")
 let searchBar = new GuiTextField(0, Client.getMinecraft().field_71466_p,  Renderer.screen.getWidth() / 3.5, Renderer.screen.getHeight() / 1.7, 100, 10);
 let searchTerm = "";
-let sound = "note.hat"
 const soundComponent = new TextComponent(" &4/ho sound <sound> &r: &eChanges typing sound&r &lChoose sound from this website: https://www.minecraftforum.net/forums/mapping-and-modding-java-edition/mapping-and-modding-tutorials/2213619-1-8-all-playsound-sound-arguments&r &e&l<CASE SENSITIVE>").setHover("show_text", ("Open Sound Url")).setClick("open_url", "https://www.minecraftforum.net/forums/mapping-and-modding-java-edition/mapping-and-modding-tutorials/2213619-1-8-all-playsound-sound-arguments")
 //data
 const firstTimeMessage = new TextComponent(`${prefix} &l&eWelcome, use &4/hoverover &eto check commands. \n&rLore deletes when you change gui, or click an item idk why lol`).setClick("run_command", "/ho").setHover("show_text", "&7Run &e&l/hoverover")
 const data = new PogObject("ItemHoverOver", {
   firsttime: true,
-  toggle: false
+  toggle: false,
+  sound: "note.hat",
 }, "data.json")
+let sound = data.sound
 
 if(data.firsttime == true) {
   data.firsttime = false
@@ -45,6 +46,7 @@ register("Command", (...args) => {
       if(checkSound(args1) == true) {
         sound = args1
         ChatLib.chat(`${prefix} &4Sound check success!`)
+        data.save()
       } else {
         ChatLib.chat(`${prefix} &4Sound check unsuccessful! Make sure sound exist in the website. &e&l<CASE SENSITIVE>`)
       }
