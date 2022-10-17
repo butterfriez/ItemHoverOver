@@ -51,9 +51,8 @@ register("guiMouseClick", (x, y, button) => {
 })
 
 register("guiRender", (x, y, gui) => {
-  console.log(gui.class.getName())
   if(data.toggle == true && checkSkyblock()) {
-    if(gui.class.getName().toLowerCase().includes("profileviewer") || gui.class.getName() == "net.minecraft.client.gui.GuiIngameMenu") {
+    if(gui.class.getName().toLowerCase().includes("profileviewer") /*|| gui.class.getName() == "net.minecraft.client.gui.GuiIngameMenu"*/) {
       return
     } else {
       searchBar.func_146194_f() //draw
