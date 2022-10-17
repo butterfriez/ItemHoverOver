@@ -1,4 +1,11 @@
 /// <reference types="../../CTAutocomplete" />
-export default function checkSkyblock() {
+import { soundList } from "./SoundList"
+function checkSkyblock() {
     return Scoreboard.getTitle().removeFormatting().includes("SKYBLOCK")
 }
+
+function checkSound(String) {
+    return soundList.includes(String)
+}
+
+export { checkSkyblock, checkSound }

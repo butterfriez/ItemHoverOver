@@ -6,15 +6,17 @@
 import PogObject from "../PogData"
 import Lore from "../Lore"
 //util
-import checkSkyblock from "./utils/util"
+import { checkSkyblock, checkSound } from "./utils/util"
 //prefix
 const prefix = "&7[&r&3Item Hover Over&r&7] &r"
 //variables
 const GuiTextField = Java.type("net.minecraft.client.gui.GuiTextField")
 let searchBar = new GuiTextField(0, Client.getMinecraft().field_71466_p,  Renderer.screen.getWidth() / 3.5, Renderer.screen.getHeight() / 1.7, 100, 10);
 let searchTerm = "";
+let sound = "note.hat"
+const soundComponent = new TextComponent(" &4/ho sound <sound> &r: &eChanges typing sound&r &lChoose sound from this website: https://www.minecraftforum.net/forums/mapping-and-modding-java-edition/mapping-and-modding-tutorials/2213619-1-8-all-playsound-sound-arguments&r &e&l<CASE SENSITIVE>").setHover("show_text", ("Open Sound Url")).setClick("open_url", "https://www.minecraftforum.net/forums/mapping-and-modding-java-edition/mapping-and-modding-tutorials/2213619-1-8-all-playsound-sound-arguments")
 //data
-const firstTimeMessage = new Message(new TextComponent(`${prefix} &l&eWelcome, use &4/hoverover &eto check commands. \n&rLore deletes when you change gui, or click an item idk why lol`).setClick("run_command", "/ho").setHover("show_text", "&7Run &e&l/hoverover"))
+const firstTimeMessage = new TextComponent(`${prefix} &l&eWelcome, use &4/hoverover &eto check commands. \n&rLore deletes when you change gui, or click an item idk why lol`).setClick("run_command", "/ho").setHover("show_text", "&7Run &e&l/hoverover")
 const data = new PogObject("ItemHoverOver", {
   firsttime: true,
   toggle: false
@@ -38,9 +40,19 @@ register("Command", (...args) => {
         ChatLib.chat(`${prefix} &4Hover: &r&l${data.toggle}`)
       }
       break;
-  
+    case "sound":
+      let args1 = args[1]
+      if(checkSound(args1) == true) {
+        sound = args1
+        ChatLib.chat(`${prefix} &4Sound check success!`)
+      } else {
+        ChatLib.chat(`${prefix} &4Sound check unsuccessful! Make sure sound exist in the website. &e&l<CASE SENSITIVE>`)
+      }
+      console.log(args1 + checkSound(args1))
+      break;
     default:
-      ChatLib.chat(`${prefix} &4Commands&r:\n &4/ho toggle &r: &eToggles the enchant checker`)
+      ChatLib.chat(`${prefix} &4Commands&r:\n &4/ho toggle &r: &eToggles the enchant checker&r`)
+      soundComponent.chat()
       break;
   }
 }).setName("hoverover", true).setAliases("ho")
@@ -64,6 +76,7 @@ register("guiRender", (x, y, gui) => {
 register("guiKey", (char, keyCode, gui, event) => {
   if(searchBar.func_146206_l()) { // check if textbox focused
     searchBar.func_146201_a(char, keyCode) // add letter to box
+    World.playSound(sound, 10, 10)
     if(keyCode != 1) {
       cancel(event)
     }
