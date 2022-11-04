@@ -11,7 +11,7 @@ import { checkSkyblock, checkSound } from "./utils/util"
 const prefix = "&7[&r&3Item Hover Over&r&7] &r"
 //variables
 const GuiTextField = Java.type("net.minecraft.client.gui.GuiTextField")
-let searchBar = new GuiTextField(0, Client.getMinecraft().field_71466_p,  Renderer.screen.getWidth() / 3.5, Renderer.screen.getHeight() / 1.7, 100, 10);
+let searchBar = new GuiTextField(0, Client.getMinecraft().field_71466_p,  275, 310, 100, 10);
 let searchTerm = "";
 const soundComponent = new TextComponent(" &4/ho sound <sound> &r: &eChanges typing sound&r &lChoose sound from this website: https://www.minecraftforum.net/forums/mapping-and-modding-java-edition/mapping-and-modding-tutorials/2213619-1-8-all-playsound-sound-arguments&r &e&l<CASE SENSITIVE>").setHover("show_text", ("Open Sound Url")).setClick("open_url", "https://www.minecraftforum.net/forums/mapping-and-modding-java-edition/mapping-and-modding-tutorials/2213619-1-8-all-playsound-sound-arguments")
 //data
@@ -23,7 +23,7 @@ const data = new PogObject("ItemHoverOver", {
 }, "data.json")
 let sound = data.sound
 
-if(data.firsttime == true) {
+if(data.firsttime) {
   data.firsttime = false
   firstTimeMessage.chat()
 }
@@ -31,29 +31,29 @@ if(data.firsttime == true) {
 register("Command", (...args) => {
   switch (args[0]) {
     case "toggle":
-      if(data.toggle == false) {
-        data.toggle = true
-        data.save()
-        ChatLib.chat(`${prefix} &4Hover: &r&l${data.toggle}`)
-      } else {
+      if(data.toggle) {
         data.toggle = false
         data.save()
-        ChatLib.chat(`${prefix} &4Hover: &r&l${data.toggle}`)
+        ChatLib.chat(`${prefix}&4Hover: &r&l${data.toggle}`)
+      } else {
+        data.toggle = true
+        data.save()
+        ChatLib.chat(`${prefix}&4Hover: &r&l${data.toggle}`)
       }
       break;
     case "sound":
       let args1 = args[1]
-      if(checkSound(args1) == true) {
+      if(checkSound(args1)) {
         sound = args1
-        ChatLib.chat(`${prefix} &4Sound check success!`)
+        ChatLib.chat(`${prefix}&4Sound check success!`)
         data.save()
       } else {
-        ChatLib.chat(`${prefix} &4Sound check unsuccessful! Make sure sound exist in the website. &e&l<CASE SENSITIVE>`)
+        ChatLib.chat(`${prefix}&4Sound check unsuccessful! Make sure sound exist in the website. &e&l<CASE SENSITIVE>`)
       }
       console.log(args1 + checkSound(args1))
       break;
     default:
-      ChatLib.chat(`${prefix} &4Commands&r:\n &4/ho toggle &r: &eToggles the enchant checker&r`)
+      ChatLib.chat(`${prefix} &4Commands&r:\n &4/ho toggle &r: &eToggles the enchant checker&r\n &4/ho cs &r: &eChecks if in skyblock. &r&lToggable`)
       soundComponent.chat()
       break;
   }
@@ -65,12 +65,10 @@ register("guiMouseClick", (x, y, button) => {
 })
 
 register("guiRender", (x, y, gui) => {
-  if(data.toggle == true && checkSkyblock()) {
-    if(gui.class.getName().toLowerCase().includes("profileviewer") || gui.class.getName() == "net.minecraft.client.gui.GuiIngameMenu") {
-      return
-    } else {
+  if(data.toggle && checkSkyblock()) {
+    if(gui instanceof Java.type("net.minecraft.client.gui.inventory.GuiContainer")) {
       searchBar.func_146194_f() //draw
-      Renderer.drawStringWithShadow("Search Item Enchant", Renderer.screen.getWidth() / 3.52, Renderer.screen.getHeight() / 1.8)
+      Renderer.drawStringWithShadow('Search Item Enchant', 275, 300)
     }
   }
 })
@@ -85,14 +83,15 @@ register("guiKey", (char, keyCode, gui, event) => {
   }
 })
 
+
 register("tick", () => {
-  if(Client.isInGui() == false) {
-    searchBar.func_146195_b(false) //set focus
+  if (!Client.isInGui()) {
+    searchBar.func_146195_b(false) // setfocused
   } else {
     searchTerm = searchBar.func_146179_b()
   }
   //add lore
-  if(data.toggle == true) {
+  if(data.toggle) {
     let hoveroverslot = Client.currentGui.get()?.getSlotUnderMouse()
     if(hoveroverslot == (undefined || null)) {
       return
@@ -117,7 +116,9 @@ register("tick", () => {
   }
 })
 
+
 /**
  * TODO
- * 1. add pos change to textfield
+ * 1. find right math to render textfield
+ * 2. draw rectangle on items
  */

@@ -1,4 +1,4 @@
-const soundList = [
+export const soundList = [
     "ambient.cave.cave",
     "ambient.weather.rain",
     "ambient.weather.thunder",
@@ -246,5 +246,3 @@ const soundList = [
     "music.game.end.credits",
     "music.game.nether",
 ]
-
-export {soundList}
